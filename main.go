@@ -16,6 +16,22 @@ func main() {
 	// которая возвращает роутер с предопределенными средними программами
 	// (middleware) для обработки запросов и ответов
 
+	//чето для corps policy
+	//типа разрешение фронту обращаться к этому серверу
+	router.Use(func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
+		c.Next()
+	})
+	//
+
 	router.GET("/", func(c *gin.Context) { c.JSON(http.StatusOK, "все супер") })
 	router.POST("/employee", handler.CreateEmployee)
 	router.GET("/employee/:id", handler.GetEmployee)
