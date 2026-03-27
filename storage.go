@@ -17,7 +17,7 @@ type Employee struct {
 type Storage interface {
 	Insert(e *Employee)
 	Get(id int) (Employee, error)
-	Update(id int, e Employee)
+	Update(id int, e Employee) error
 	Delete(id int)
 }
 
@@ -55,10 +55,18 @@ func (s *MemoryStorage) Get(id int) (Employee, error) {
 	return employee, nil
 }
 
-func (s *MemoryStorage) Update(id int, e Employee) {
+func (s *MemoryStorage) Update(id int, e Employee) error {
 	s.Lock()
+	defer s.Unlock()
+
+	_, ok := s.data[id]
+	if !ok {
+		return errors.New("нету такого сотрудника ты че бл")
+	}
+
+	e.ID = id //чтобы id был такой как в обращении, а не в json теле
 	s.data[id] = e
-	s.Unlock()
+	return nil
 }
 
 func (s *MemoryStorage) Delete(id int) {

@@ -16,8 +16,7 @@ func main() {
 	// которая возвращает роутер с предопределенными средними программами
 	// (middleware) для обработки запросов и ответов
 
-	//чето для corps policy
-	//типа разрешение фронту обращаться к этому серверу
+	//разрешение фронту обращаться к этому серверу
 	router.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE")

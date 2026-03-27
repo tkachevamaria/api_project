@@ -71,8 +71,12 @@ func (h *Handler) UpdateEmployee(c *gin.Context) {
 		return
 	}
 
-	h.storage.Update(id, employee) //апдейтим хранилище
+	//h.storage.Update(id, employee) //апдейтим хранилище
 
+	if err := h.storage.Update(id, employee); err != nil {
+		c.JSON(http.StatusBadRequest, ErrorResponse{Message: err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, "все заебись, сотрудник обновлен") //вывод айдишника сотрудника не понимаю зачем правда
 
 }
